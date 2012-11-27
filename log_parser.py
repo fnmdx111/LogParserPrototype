@@ -8,9 +8,9 @@ logger = Logger(__name__)
 def process_line(line):
     whole = (date, time), request, params = (
         lambda (time, request, params): (
-            time.split(),
-            request.strip('/'),
-            tuple(params.strip('[]\n').split(']['))
+                time.split(),
+                request.strip('/'),
+                tuple(params.strip('[]\n').split(']['))
             )
         )(line.split('|'))
 
