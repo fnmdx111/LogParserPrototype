@@ -1,3 +1,4 @@
+from collections import Counter
 
 class Requests(object):
     def __init__(self):
@@ -11,13 +12,20 @@ class Requests(object):
     def add_req(self, time_number, params):
         self.request_count += 1
 
+        parsed = Requests.parse_params(params)
         self.requests[time_number].append(Requests.parse_params(params))
+
+        self.handle(parsed)
 
 
     @staticmethod
     def parse_params(params):
         return dict(map(lambda s: s.split('/'),
                         params))
+
+
+    def handle(self, parsed_params):
+        pass
 
 
 
@@ -31,6 +39,12 @@ class ReqLine_Live2(Requests):
     def __init__(self):
         super(ReqLine_Live2, self).__init__()
 
+        self.line_numbers = Counter()
+
+
+    def handle(self, parsed_params):
+        self.line_numbers.update((parsed_params['lineNo'],))
+
 
 
 class ReqLine_Map(Requests):
@@ -42,6 +56,12 @@ class ReqLine_Map(Requests):
 class ReqLine_Map2(Requests):
     def __init__(self):
         super(ReqLine_Map2, self).__init__()
+
+        self.line_numbers = Counter()
+
+
+    def handle(self, parsed_params):
+        self.line_numbers.update((parsed_params['lineNo'],))
 
 
 
@@ -91,6 +111,12 @@ class ReqStop_StopList(Requests):
     def __init__(self):
         super(ReqStop_StopList, self).__init__()
 
+        self.stop_names = Counter()
+
+
+    def handle(self, parsed_params):
+        self.stop_names.update((parsed_params['stopName'],))
+
 
 
 class ReqStop2Stop_Lines4Less(Requests):
@@ -133,6 +159,8 @@ req_flag = [
 class TimeSlice(object):
     def __init__(self, number):
         self.hour_number = number
+        self.name = '%02d:00 - %02d:00' % (self.hour_number, self.hour_number + 1)
+        self.count = 0
 
         self.requests = dict(zip(req_flag,
                                  map(lambda req_class: req_class(),
@@ -140,6 +168,7 @@ class TimeSlice(object):
 
 
     def add(self, time_number, (req_name, params)):
+        self.count += 1
         self.requests[req_name].add_req(time_number, params) # e.g. ReqLine_Live.add_req(time_number, params)
 
 
@@ -158,7 +187,7 @@ class Log(object):
 
 
     def add(self, time, request):
-        self.logger.info('processing', time, request)
+        # self.logger.info('processing', time, request)
 
         time_number = Log.time_to_number(time)
         self.time_slices[time_number].add(time_number, request)
