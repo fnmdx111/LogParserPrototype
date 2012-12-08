@@ -21,6 +21,10 @@ def get_init_data():
     d_prime = defaultdict(dict)
     for (main, sub), v in d:
         d_prime[main][sub] = v
+    for main in d_prime:
+        stub = {sub: sum(d_prime[main][sub])
+                for sub in d_prime[main]}
+        d_prime[main]['overview'] = [stub.keys(), map(lambda i: [i], stub.values())]
 
     d_prime.update({
         'time_slice_names': from_log(from_t_slice_get_name),

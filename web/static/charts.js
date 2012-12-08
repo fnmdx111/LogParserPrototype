@@ -13,6 +13,13 @@ var sum = function (array) {
     return result;
 };
 
+var sum_prime = function (array) {
+    var result = 0;
+    for (var i = 0; i < array.length; i++) {
+        result += array[i][0];
+    }
+    return result;
+};
 
 var make_title = function (title, array) {
     return 'Requests `' + title + '\' per Hour (total: ' + sum(array) + ')';
@@ -49,6 +56,47 @@ var with_ticks = function (ticks) {
 };
 
 
+var overview_bar_chart = function (title, target, legend, data, ticks) {
+    return $.jqplot(target, data, {
+        title: title,
+        animate: !$.jqplot.use_excanvas,
+        stackSeries: false,
+        showMarker: false,
+        highlighter: {
+            show: true,
+            showTooltip: false
+        },
+        seriesDefaults: {
+            renderer:$.jqplot.BarRenderer,
+            rendererOptions: {
+                barDirection: 'vertical',
+                barMargin: 30,
+                highlightMouseOver: true
+            },
+            pointLabels: {
+                show: true,
+                edgeTolerance: -15
+            }
+        },
+        series: legend.map(function (i) { return {label: i} }),
+        axes: {
+            xaxis: {
+                renderer:$.jqplot.CategoryAxisRenderer,
+                ticks: ticks
+            },
+            yaxis: {
+                pad: 1.2
+            }
+        },
+        legend: {
+            show: true,
+            location: 'e',
+            placement: 'outsideGrid'
+        }
+    });
+};
+
+
 var init_charts = function () {
     $.post('get_init_data', function (data) {
         $.jqplot.config.enablePlugins = true;
@@ -82,19 +130,28 @@ var init_charts = function () {
             if (keys.hasOwnProperty(key)) {
                 var sub_dict = data[keys[key]];
                 for (var series in sub_dict) {
+                    console.log(keys[key] + '_' + series + '_div');
+                    $('#indicator_' + keys[key] + '_' + series).hide();
                     if (sub_dict.hasOwnProperty(series)) {
-                        console.log(keys[key] + '_' + series + '_div');
-
-                        $('#indicator_' + keys[key] + '_' + series).hide();
-                        charts[keys[key]][series] = my_bar_chart(
-                            make_title(keys[key] + '!' + series, sub_dict[series]),
-                            keys[key] + '_' + series + '_div',
-                            [sub_dict[series]]);
+                        if (series === 'overview') {
+                            charts[keys[key]][series] =
+                                overview_bar_chart('Overview of `' + keys[key] + '\' (total: '
+                                                       + sum_prime(sub_dict[series][1]) + ')',
+                                                   keys[key] + '_overview_div',
+                                                   sub_dict[series][0],
+                                                   sub_dict[series][1],
+                                                   [])
+                        } else {
+                            charts[keys[key]][series] = my_bar_chart(
+                                make_title(keys[key] + '!' + series, sub_dict[series]),
+                                keys[key] + '_' + series + '_div',
+                                [sub_dict[series]]);
+                        }
                     }
                 }
             }
         }
-        $('#main').bind('shown', function (e, ui) {
+        $('#main').bind('shown', function (e) {
             var series = e.target.innerHTML.split('!');
             charts[series[0]][series[1]].replot();
         })

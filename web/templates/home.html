@@ -19,6 +19,9 @@
         </div>
         <ul id="line_tabs" class="nav nav-tabs">
             <li class="active">
+                <a href="#line_overview_div" data-toggle="tab">overview</a>
+            </li>
+            <li>
                 <a href="#line_live_div" data-toggle="tab">line!live</a>
             </li>
             <li>
@@ -35,7 +38,10 @@
             </li>
         </ul>
         <div id="line_tab_contents" class="tab-content">
-            <div class="tab-pane fade in active" style="height: 500px; width: 1050px;" id="line_live_div">
+            <div class="tab-pane fade in active" style="height: 500px; width: 1050px;" id="line_overview_div">
+                {{ place_indicator('indicator_line_overview') }}
+            </div>
+            <div class="tab-pane fade in" style="height: 500px; width: 1050px;" id="line_live_div">
                 {{ place_indicator('indicator_line_live') }}
             </div>
             <div id="line_live2_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
@@ -54,6 +60,9 @@
 
         <ul id="news_tab" class="nav nav-tabs">
             <li class="active">
+                <a href="#news_overview_div" data-toggle="tab">overview</a>
+            </li>
+            <li>
                 <a href="#news_detail_div" data-toggle="tab">news!detail</a>
             </li>
             <li>
@@ -61,7 +70,10 @@
             </li>
         </ul>
         <div class="tab-content">
-            <div id="news_detail_div" style="height: 500px; width: 1050px;" class="tab-pane fade in active">
+            <div class="tab-pane fade in active" style="height: 500px; width: 1050px;" id="news_overview_div">
+                {{ place_indicator('indicator_news_overview') }}
+            </div>
+            <div id="news_detail_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
                 {{ place_indicator('indicator_news_detail') }}
             </div>
             <div id="news_list_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
@@ -71,6 +83,9 @@
 
         <ul id="stop_tab" class="nav nav-tabs">
             <li class="active">
+                <a href="#stop_overview_div" data-toggle="tab">overview</a>
+            </li>
+            <li>
                 <a href="#stop_lines_div" data-toggle="tab">stop!lines</a>
             </li>
             <li>
@@ -84,7 +99,10 @@
             </li>
         </ul>
         <div class="tab-content">
-            <div id="stop_lines_div" style="height: 500px; width: 1050px;" class="tab-pane fade in active">
+            <div id="stop_overview_div" style="height: 500px; width: 1050px;" class="tab-pane fade in active">
+                {{ place_indicator('indicator_stop_overview') }}
+            </div>
+            <div id="stop_lines_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
                 {{ place_indicator('indicator_stop_lines') }}
             </div>
             <div id="stop_list4name_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
@@ -100,6 +118,9 @@
 
         <ul id="stop2stop_tab" class="nav nav-tabs">
             <li class="active">
+                <a href="#stop2stop_overview_div" data-toggle="tab">overview</a>
+            </li>
+            <li>
                 <a href="#stop2stop_lines4less_div" data-toggle="tab">stop2stop!lines4less</a>
             </li>
             <li>
@@ -107,7 +128,10 @@
             </li>
         </ul>
         <div class="tab-content">
-            <div id="stop2stop_lines4less_div" style="height: 500px; width: 1050px;" class="tab-pane fade in active">
+            <div id="stop2stop_overview_div" style="height: 500px; width: 1050px;" class="tab-pane fade in active">
+                {{ place_indicator('indicator_stop2stop_overview') }}
+            </div>
+            <div id="stop2stop_lines4less_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
                 {{ place_indicator('indicator_stop2stop_lines4less') }}
             </div>
             <div id="stop2stop_name2id_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
