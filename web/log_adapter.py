@@ -25,7 +25,10 @@ def get_multiple_log():
         with lock:
             l.append(log)
 
-    for root, dir, files in os.walk(os.path.join('parser', 'buslogs')):
+    buslogs_path = os.path.join('' if 'web' not in os.getcwd() else '..', 'buslogs')
+    print buslogs_path
+    # a bit ugly here, but we'll figure it out later
+    for root, dir, files in os.walk(buslogs_path):
         files = files[:]
         files.remove('.gitignore')
         for paths in misc.take(files, by=3):
