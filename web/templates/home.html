@@ -6,12 +6,121 @@
     </style>
 {% endblock %}
 
+{% macro place_indicator(id) -%}
+    <img src="{{ url_for('static', filename='loader.gif') }}" id="{{ id }}" style="vertical-align: middle" />
+{%- endmacro %}
 
 {% block body_content %}
     {{ super() }}
 
-    <div class="container main">
+    <div class="container" id="main">
+        <div id="total_per_hour" style="height: 500px; width: 1050px;" class="">
+            {{ place_indicator('indicator_total_per_hour') }}
+        </div>
+        <ul id="line_tabs" class="nav nav-tabs">
+            <li class="active">
+                <a href="#line_live_div" data-toggle="tab">line!live</a>
+            </li>
+            <li>
+                <a href="#line_live2_div" data-toggle="tab">line!live2</a>
+            </li>
+            <li>
+                <a href="#line_map_div" data-toggle="tab">line!map</a>
+            </li>
+            <li>
+                <a href="#line_map2_div" data-toggle="tab">line!map2</a>
+            </li>
+            <li>
+                <a href="#line_query_div" data-toggle="tab">line!query</a>
+            </li>
+        </ul>
+        <div id="line_tab_contents" class="tab-content">
+            <div class="tab-pane fade in active" style="height: 500px; width: 1050px;" id="line_live_div">
+                {{ place_indicator('indicator_line_live') }}
+            </div>
+            <div id="line_live2_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
+                {{ place_indicator('indicator_line_live2') }}
+            </div>
+            <div id="line_map_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
+                {{ place_indicator('indicator_line_map') }}
+            </div>
+            <div id="line_map2_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
+                {{ place_indicator('indicator_line_map2') }}
+            </div>
+            <div id="line_query_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
+                {{ place_indicator('indicator_line_query') }}
+            </div>
+        </div>
 
+        <ul id="news_tab" class="nav nav-tabs">
+            <li class="active">
+                <a href="#news_detail_div" data-toggle="tab">news!detail</a>
+            </li>
+            <li>
+                <a href="#news_list_div" data-toggle="tab">news!list</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="news_detail_div" style="height: 500px; width: 1050px;" class="tab-pane fade in active">
+                {{ place_indicator('indicator_news_detail') }}
+            </div>
+            <div id="news_list_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
+                {{ place_indicator('indicator_news_list') }}
+            </div>
+        </div>
+
+        <ul id="stop_tab" class="nav nav-tabs">
+            <li class="active">
+                <a href="#stop_lines_div" data-toggle="tab">stop!lines</a>
+            </li>
+            <li>
+                <a href="#stop_list4name_div" data-toggle="tab">stop!list4name</a>
+            </li>
+            <li>
+                <a href="#stop_nearby_div" data-toggle="tab">stop!nearby</a>
+            </li>
+            <li>
+                <a href="#stop_stoplist_div" data-toggle="tab">stop!stoplist</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="stop_lines_div" style="height: 500px; width: 1050px;" class="tab-pane fade in active">
+                {{ place_indicator('indicator_stop_lines') }}
+            </div>
+            <div id="stop_list4name_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
+                {{ place_indicator('indicator_stop_list4name') }}
+            </div>
+            <div id="stop_nearby_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
+                {{ place_indicator('indicator_stop_nearby') }}
+            </div>
+            <div id="stop_stoplist_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
+                {{ place_indicator('indicator_stop_stoplist') }}
+            </div>
+        </div>
+
+        <ul id="stop2stop_tab" class="nav nav-tabs">
+            <li class="active">
+                <a href="#stop2stop_lines4less_div" data-toggle="tab">stop2stop!lines4less</a>
+            </li>
+            <li>
+                <a href="#stop2stop_name2id_div" data-toggle="tab">stop2stop!name2id</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="stop2stop_lines4less_div" style="height: 500px; width: 1050px;" class="tab-pane fade in active">
+                {{ place_indicator('indicator_stop2stop_lines4less') }}
+            </div>
+            <div id="stop2stop_name2id_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
+                {{ place_indicator('indicator_stop2stop_name2id') }}
+            </div>
+        </div>
+
+        <div id="client_div" style="height: 500px; width: 1050px;" class="">
+            {{ place_indicator('indicator_client') }}
+        </div>
+        <div id="param_div" style="height: 500px; width: 1050px;" class="">
+            {{ place_indicator('indicator_param') }}
+        </div>
     </div>
 {% endblock %}
 
@@ -20,6 +129,17 @@
 {% block bootstrap_js_bottom %}
     {{ super() }}
 
+    <script type="text/javascript" src="/static/charts.js"></script>
     <script type="text/javascript">
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        $(init_charts);
     </script>
+
+    <script type="text/javascript" src="/static/jqplot/plugins/jqplot.barRenderer.min.js"></script>
+    <script type="text/javascript" src="/static/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+    <script type="text/javascript" src="/static/jqplot/plugins/jqplot.highlighter.min.js"></script>
+    <script type="text/javascript" src="/static/jqplot/plugins/jqplot.pointLabels.min.js"></script>
+    <script type="text/javascript" src="/static/jqplot/plugins/jqplot.canvasTextRenderer.min.js"></script>
+    <script type="text/javascript" src="/static/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
+
 {% endblock %}

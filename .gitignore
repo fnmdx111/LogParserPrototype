@@ -1,3 +1,6 @@
 .idea/*
 *.pyc
 *.txt
+*.rar
+*.zip
+parser/buslogs/*

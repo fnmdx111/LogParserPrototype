@@ -18,6 +18,15 @@ class Requests(object):
         self.handle(parsed)
 
 
+    def __add__(self, other):
+        requests = Requests()
+        requests.request_count = self.request_count + other.request_count
+        for i in range(24):
+            requests.requests[i] = self.requests[i][:]
+            requests.requests[i].extend(other.requests[i])
+        return requests
+
+
     @staticmethod
     def parse_params(params):
         return dict(map(lambda s: s.split('/'),
@@ -159,7 +168,7 @@ req_flag = [
 class TimeSlice(object):
     def __init__(self, number):
         self.hour_number = number
-        self.name = '%02d:00 - %02d:00' % (self.hour_number, self.hour_number + 1)
+        self.name = '%02d-%02d' % (self.hour_number, self.hour_number + 1)
         self.count = 0
 
         self.requests = dict(zip(req_flag,
@@ -172,9 +181,21 @@ class TimeSlice(object):
         self.requests[req_name].add_req(time_number, params) # e.g. ReqLine_Live.add_req(time_number, params)
 
 
+    def __add__(self, other):
+        if not isinstance(other, TimeSlice):
+            raise ValueError, 'incompatible operand type'
+
+        time_slice = TimeSlice(self.hour_number)
+        time_slice.count = self.count + other.count
+        for req_name in self.requests:
+            time_slice.requests[req_name] = self.requests[req_name] + other.requests[req_name]
+        return time_slice
+
+
+
 
 class Log(object):
-    def __init__(self, logger, day=None):
+    def __init__(self, logger=None, day=None):
         self.day = day
         self.logger = logger
 
@@ -187,10 +208,36 @@ class Log(object):
 
 
     def add(self, time, request):
-        # self.logger.info('processing', time, request)
-
         time_number = Log.time_to_number(time)
         self.time_slices[time_number].add(time_number, request)
 
 
+    def __add__(self, other):
+        if not isinstance(other, Log):
+            raise ValueError, 'incompatible operand type'
+
+        log = Log()
+        for i in range(24):
+            log.time_slices[i] = self.time_slices[i] + other.time_slices[i]
+
+        return log
+
+
+
+
+if __name__ == '__main__':
+    req1 = Requests()
+    req1.add_req(1, ['a/b'])
+    req2 = Requests()
+    req2.add_req(1, ['b/c'])
+    req2.add_req(2, ['b/c'])
+    print (req1 + req2).requests, (req1 + req2).request_count
+    ts1 = TimeSlice(0)
+    ts2 = TimeSlice(0)
+    ts1.add(0, ('line!live', ['a/b', 'b/c']))
+    ts2.add(0, ('line!live', ['c/d', 'd/e']))
+    ts2.add(0, ('line!live', ['e/f', 'f/g']))
+    ts3 = ts1 + ts2
+    for req_name in ts3.requests:
+        print req_name, ts3.requests[req_name].requests
 
