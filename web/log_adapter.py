@@ -1,7 +1,7 @@
 import os
 import threading
 import operator
-from web import misc
+from web import misc, app
 from web.parser import log_parser
 from web.parser.type import Log
 
@@ -25,12 +25,29 @@ def get_multiple_log():
         with lock:
             l.append(log)
 
-    buslogs_path = os.path.join('' if 'web' not in os.getcwd() else '..', 'buslogs')
+    cwd = os.getcwd()
+    print cwd
+    if 'LogParserPrototype' not in cwd:
+        # working outside `LogParserPrototype'
+        buslogs_path_part = 'LogParserPrototype'
+    else:
+        if 'web' in cwd:
+            # working inside `web'
+            buslogs_path_part = '..'
+        else:
+            # working under `LogParserPrototype'
+            buslogs_path_part = ''
+    buslogs_path = os.path.join(buslogs_path_part, 'buslogs')
     print buslogs_path
+
     # a bit ugly here, but we'll figure it out later
     for root, dir, files in os.walk(buslogs_path):
-        files = files[:]
-        files.remove('.gitignore')
+        if app.debug:
+            files = files[:]
+            files.remove('.gitignore')
+        else:
+            pass
+
         for paths in misc.take(files, by=3):
             threads = []
             for log_path in paths:
