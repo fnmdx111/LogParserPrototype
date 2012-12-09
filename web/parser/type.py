@@ -13,7 +13,7 @@ class Requests(object):
         self.request_count += 1
 
         parsed = Requests.parse_params(params)
-        self.requests[time_number].append(Requests.parse_params(params))
+        # self.requests[time_number].append(Requests.parse_params(params))
 
         self.handle(parsed)
 
