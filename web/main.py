@@ -4,7 +4,7 @@ from web.parser import type
 from web import app, log_adapter
 from web.misc import from_t_slice_get_name, from_t_slice_get_count, from_t_slice_get_count_of
 
-@app.route('/home')
+@app.route('/')
 def home():
     return render_template('home.html')
 
