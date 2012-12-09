@@ -12,10 +12,9 @@ class Requests(object):
     def add_req(self, time_number, params):
         self.request_count += 1
 
-        parsed = Requests.parse_params(params)
         # self.requests[time_number].append(Requests.parse_params(params))
 
-        self.handle(parsed)
+        self.handle(params)
 
 
     def __add__(self, other):
@@ -33,7 +32,7 @@ class Requests(object):
                         params))
 
 
-    def handle(self, parsed_params):
+    def handle(self, params):
         pass
 
 
@@ -69,8 +68,8 @@ class ReqLine_Map2(Requests):
         self.line_numbers = Counter()
 
 
-    def handle(self, parsed_params):
-        self.line_numbers.update((parsed_params['lineNo'],))
+    def handle(self, params):
+        self.line_numbers.update((Requests.parse_params(params)['lineNo'],))
 
 
 
@@ -123,8 +122,8 @@ class ReqStop_StopList(Requests):
         self.stop_names = Counter()
 
 
-    def handle(self, parsed_params):
-        self.stop_names.update((parsed_params['stopName'],))
+    def handle(self, params):
+        self.stop_names.update((Requests.parse_params(params)['stopName'],))
 
 
 
