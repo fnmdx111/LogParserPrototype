@@ -31,7 +31,7 @@ def get_init_data():
         'total_requests_per_hour':  from_log(from_t_slice_get_count),
         'client': from_log(from_t_slice_get_count_of('client'))
     })
-    print d_prime
+    app.logger.info(d_prime)
 
     return jsonify(d_prime)
 

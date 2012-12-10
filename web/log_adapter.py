@@ -38,7 +38,7 @@ def get_multiple_log():
             # working under `LogParserPrototype'
             buslogs_path_part = ''
     buslogs_path = os.path.join(buslogs_path_part, 'buslogs')
-    print buslogs_path
+    app.logger.info(buslogs_path)
 
     # a bit ugly here, but we'll figure it out later
     for root, dir, files in os.walk(buslogs_path):
@@ -52,7 +52,7 @@ def get_multiple_log():
             threads = []
             for log_path in paths:
                 thread = threading.Thread(target=lambda: _(logs, os.path.join(root, '', log_path)))
-                print 'starting', log_path
+                app.logger.info('starting', log_path)
                 thread.start()
                 threads.append(thread)
 
