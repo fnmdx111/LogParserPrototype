@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 from collections import Counter
 
 class Requests(object):
@@ -18,7 +20,7 @@ class Requests(object):
 
 
     def __add__(self, other):
-        requests = Requests()
+        requests = self.__class__()
         requests.request_count = self.request_count + other.request_count
         for i in range(24):
             requests.requests[i] = self.requests[i][:]
@@ -70,6 +72,15 @@ class ReqLine_Map2(Requests):
 
     def handle(self, params):
         self.line_numbers.update((Requests.parse_params(params)['lineNo'],))
+
+
+    def __add__(self, other):
+        request = super(ReqLine_Map2, self).__add__(other)
+        request.line_numbers = Counter()
+        request.line_numbers.update(self.line_numbers)
+        request.line_numbers.update(other.line_numbers)
+
+        return request
 
 
 
@@ -124,6 +135,16 @@ class ReqStop_StopList(Requests):
 
     def handle(self, params):
         self.stop_names.update((Requests.parse_params(params)['stopName'],))
+
+
+    def __add__(self, other):
+        request = super(ReqStop_StopList, self).__add__(other)
+        request.stop_names = Counter()
+        request.stop_names.update(self.stop_names)
+        request.stop_names.update(other.stop_names)
+
+        return request
+
 
 
 

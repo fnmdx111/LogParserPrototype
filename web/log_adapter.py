@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 import os
 import threading
 import operator
@@ -76,6 +78,9 @@ def get_current_log():
 
     return log[0]
 
+
+
+get_counter = log_parser.get_counter
 
 
 if __name__ == '__main__':

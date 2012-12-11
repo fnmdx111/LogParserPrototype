@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 from collections import defaultdict
 from flask import render_template, jsonify
 from web.parser import type
@@ -7,6 +9,16 @@ from web.misc import from_t_slice_get_name, from_t_slice_get_count, from_t_slice
 @app.route('/')
 def home():
     return render_template('home.html')
+
+
+
+@app.route('/top')
+def top():
+    stop_names_counter, line_numbers_counter = log_adapter.get_counter(log_adapter.get_multiple_log())
+
+    return render_template('top.html',
+                           top_stop_names=stop_names_counter.most_common(100),
+                           top_line_numbers=line_numbers_counter.most_common(100))
 
 
 

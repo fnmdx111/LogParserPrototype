@@ -3,6 +3,8 @@
 {% block style %}
     {{ super() }}
     <style type="text/css">
+        div[id*="div"] {
+        }
     </style>
 {% endblock %}
 
@@ -58,7 +60,7 @@
             </div>
         </div>
 
-        <ul id="news_tab" class="nav nav-tabs">
+        <ul id="news_tabs" class="nav nav-tabs">
             <li class="active">
                 <a href="#news_overview_div" data-toggle="tab">overview</a>
             </li>
@@ -81,7 +83,7 @@
             </div>
         </div>
 
-        <ul id="stop_tab" class="nav nav-tabs">
+        <ul id="stop_tabs" class="nav nav-tabs">
             <li class="active">
                 <a href="#stop_overview_div" data-toggle="tab">overview</a>
             </li>
@@ -116,7 +118,7 @@
             </div>
         </div>
 
-        <ul id="stop2stop_tab" class="nav nav-tabs">
+        <ul id="stop2stop_tabs" class="nav nav-tabs">
             <li class="active">
                 <a href="#stop2stop_overview_div" data-toggle="tab">overview</a>
             </li>

@@ -128,33 +128,41 @@ var init_charts = function () {
         };
         for (var key in keys) {
             if (keys.hasOwnProperty(key)) {
-                var sub_dict = data[keys[key]];
-                for (var series in sub_dict) {
-                    console.log(keys[key] + '_' + series + '_div');
-                    $('#indicator_' + keys[key] + '_' + series).hide();
-                    if (sub_dict.hasOwnProperty(series)) {
-                        if (series === 'overview') {
-                            charts[keys[key]][series] =
-                                overview_bar_chart('Overview of `' + keys[key] + '\' (total: '
-                                                       + sum_prime(sub_dict[series][1]) + ')',
-                                                   keys[key] + '_overview_div',
-                                                   sub_dict[series][0],
-                                                   sub_dict[series][1],
-                                                   [])
-                        } else {
-                            charts[keys[key]][series] = my_bar_chart(
-                                make_title(keys[key] + '!' + series, sub_dict[series]),
-                                keys[key] + '_' + series + '_div',
-                                [sub_dict[series]]);
-                        }
-                    }
-                }
+                var overview = 'overview';
+                var sub_dict = data[keys[key]][overview];
+
+                console.log(keys[key] + '_overview_div');
+                $('#indicator_' + keys[key] + '_' + overview).hide();
+
+                charts[keys[key]][overview] =
+                    overview_bar_chart('Overview of `' + keys[key] + '\' (total: '
+                                           + sum_prime(data[keys[key]][overview][1]) + ')',
+                                       keys[key] + '_overview_div',
+                                       sub_dict[0],
+                                       sub_dict[1],
+                                       [])
             }
         }
         $('#main').bind('shown', function (e) {
-            var series = e.target.innerHTML.split('!');
-            charts[series[0]][series[1]].replot();
-        })
+            var series = e.target.href.split('#');
+            series = series[1].split('_');
+            series.pop();
+
+            if (!charts[series[0]][series[1]]) {
+                console.log(series[0] + '_' + series[1] + '_div');
+                $('#indicator_' + series[0] + '_' + series[1]).hide();
+
+                var chart = undefined;
+                if (!(series[1] === 'overview')) {
+                    charts[series[0]][series[1]] = my_bar_chart(make_title(series[0] + '!' + series[1],
+                                                                data[series[0]][series[1]]),
+                                                                series[0] + '_' + series[1] + '_div',
+                                                                [data[series[0]][series[1]]]);
+                }
+            } else {
+                charts[series[0]][series[1]].replot();
+            }
+        });
     });
 };
 

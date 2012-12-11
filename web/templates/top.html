@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+
+{% macro make_table(keyword, data) %}
+    <table class="table table-hover">
+        <thead><tr>
+            <th>{{ keyword }}</th>
+            <th>Count</th>
+        </tr></thead>
+        {% for keyword, count in data %}
+            <tr>
+                <td>{{ keyword }}</td>
+                <td>{{ count }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endmacro %}
+
+
+{% block body_content %}
+    {{ super() }}
+
+    <div class="container">
+        <div class="pull-left" style="width: 40%">
+            {{ make_table('站点名', top_stop_names) }}
+        </div>
+        <div class="pull-right" style="width: 40%">
+            {{ make_table('线路号', top_line_numbers) }}
+        </div>
+    </div>
+
+{% endblock %}
+

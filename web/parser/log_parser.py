@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 from collections import defaultdict, Counter
 from logging import Logger
 import os
@@ -28,6 +30,7 @@ def get_log(path):
 
         line_no = 1
         for line in f:
+            line = line.decode('utf-8')
             if line_no % 10000 == 0:
                 print line_no
             line_no += 1
