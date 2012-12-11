@@ -2,8 +2,10 @@
 
 from collections import defaultdict, Counter
 from logging import Logger
+from operator import methodcaller
 import os
 from web.parser.type import Log
+import type as t
 
 
 logger = Logger(__name__)
@@ -52,14 +54,18 @@ def get_log(path):
 
 
 def get_counter(log):
+    startswith = lambda what: methodcaller('startswith', what)
+
     total_stop_names = Counter()
+
     for time_slice in log.time_slices:
-        total_stop_names.update(time_slice.requests['stop!stoplist'].stop_names)
+        for req_name in filter(startswith('stop!'), t.req_flag):
+            total_stop_names.update(time_slice.requests[req_name].stop_names)
 
     total_line_numbers = Counter()
     for time_slice in log.time_slices:
-        total_line_numbers.update(time_slice.requests['line!live2'].line_numbers)
-        total_line_numbers.update(time_slice.requests['line!map2'].line_numbers)
+        for req_name in filter(startswith('line!'), t.req_flag):
+            total_line_numbers.update(time_slice.requests[req_name].line_numbers)
 
     return total_stop_names, total_line_numbers
 

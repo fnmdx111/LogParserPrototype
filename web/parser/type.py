@@ -22,9 +22,9 @@ class Requests(object):
     def __add__(self, other):
         requests = self.__class__()
         requests.request_count = self.request_count + other.request_count
-        for i in range(24):
-            requests.requests[i] = self.requests[i][:]
-            requests.requests[i].extend(other.requests[i])
+#        for i in range(24):
+#            requests.requests[i] = self.requests[i][:]
+#            requests.requests[i].extend(other.requests[i])
         return requests
 
 
@@ -39,33 +39,9 @@ class Requests(object):
 
 
 
-class ReqLine_Live(Requests):
+class ReqLine(Requests):
     def __init__(self):
-        super(ReqLine_Live, self).__init__()
-
-
-
-class ReqLine_Live2(Requests):
-    def __init__(self):
-        super(ReqLine_Live2, self).__init__()
-
-        self.line_numbers = Counter()
-
-
-    def handle(self, parsed_params):
-        self.line_numbers.update((parsed_params['lineNo'],))
-
-
-
-class ReqLine_Map(Requests):
-    def __init__(self):
-        super(ReqLine_Map, self).__init__()
-
-
-
-class ReqLine_Map2(Requests):
-    def __init__(self):
-        super(ReqLine_Map2, self).__init__()
+        super(ReqLine, self).__init__()
 
         self.line_numbers = Counter()
 
@@ -75,7 +51,7 @@ class ReqLine_Map2(Requests):
 
 
     def __add__(self, other):
-        request = super(ReqLine_Map2, self).__add__(other)
+        request = super(ReqLine, self).__add__(other)
         request.line_numbers = Counter()
         request.line_numbers.update(self.line_numbers)
         request.line_numbers.update(other.line_numbers)
@@ -84,7 +60,31 @@ class ReqLine_Map2(Requests):
 
 
 
-class ReqLine_Query(Requests):
+class ReqLine_Live(ReqLine):
+    def __init__(self):
+        super(ReqLine_Live, self).__init__()
+
+
+
+class ReqLine_Live2(ReqLine):
+    def __init__(self):
+        super(ReqLine_Live2, self).__init__()
+
+
+
+class ReqLine_Map(ReqLine):
+    def __init__(self):
+        super(ReqLine_Map, self).__init__()
+
+
+
+class ReqLine_Map2(ReqLine):
+    def __init__(self):
+        super(ReqLine_Map2, self).__init__()
+
+
+
+class ReqLine_Query(ReqLine):
     def __init__(self):
         super(ReqLine_Query, self).__init__()
 
@@ -108,27 +108,9 @@ class ReqParam_PGet(Requests):
 
 
 
-class ReqStop_Lines(Requests):
+class ReqStop(Requests):
     def __init__(self):
-        super(ReqStop_Lines, self).__init__()
-
-
-
-class ReqStop_List4Name(Requests):
-    def __init__(self):
-        super(ReqStop_List4Name, self).__init__()
-
-
-
-class ReqStop_Nearby(Requests):
-    def __init__(self):
-        super(ReqStop_Nearby, self).__init__()
-
-
-
-class ReqStop_StopList(Requests):
-    def __init__(self):
-        super(ReqStop_StopList, self).__init__()
+        super(ReqStop, self).__init__()
 
         self.stop_names = Counter()
 
@@ -138,13 +120,36 @@ class ReqStop_StopList(Requests):
 
 
     def __add__(self, other):
-        request = super(ReqStop_StopList, self).__add__(other)
+        request = super(ReqStop, self).__add__(other)
         request.stop_names = Counter()
         request.stop_names.update(self.stop_names)
         request.stop_names.update(other.stop_names)
 
         return request
 
+
+
+class ReqStop_Lines(ReqStop):
+    def __init__(self):
+        super(ReqStop_Lines, self).__init__()
+
+
+
+class ReqStop_List4Name(ReqStop):
+    def __init__(self):
+        super(ReqStop_List4Name, self).__init__()
+
+
+
+class ReqStop_Nearby(ReqStop):
+    def __init__(self):
+        super(ReqStop_Nearby, self).__init__()
+
+
+
+class ReqStop_StopList(ReqStop):
+    def __init__(self):
+        super(ReqStop_StopList, self).__init__()
 
 
 
