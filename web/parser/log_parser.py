@@ -28,7 +28,7 @@ def get_log(path):
     with open(path, 'r') as f:
         d = defaultdict(set)
 
-        log = Log(logger)
+        log = Log(date=path.split('.')[-1])
 
         line_no = 1
         for line in f:

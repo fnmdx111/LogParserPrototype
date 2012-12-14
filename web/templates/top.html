@@ -1,33 +1,63 @@
 {% extends "base.html" %}
-
-
-{% macro make_table(keyword, data) %}
-    <table class="table table-hover">
-        <thead><tr>
-            <th>{{ keyword }}</th>
-            <th>Count</th>
-        </tr></thead>
-        {% for keyword, count in data %}
-            <tr>
-                <td>{{ keyword }}</td>
-                <td>{{ count }}</td>
-            </tr>
-        {% endfor %}
-    </table>
-{% endmacro %}
+{% import "framework.html" as fw %}
 
 
 {% block body_content %}
     {{ super() }}
 
     <div class="container">
+        {{ fw.make_options(options) }}
         <div class="pull-left" style="width: 40%">
-            {{ make_table('站点名', top_stop_names) }}
+            {{ fw.place_indicator('indicator_stops') }}
         </div>
         <div class="pull-right" style="width: 40%">
-            {{ make_table('线路号', top_line_numbers) }}
+            {{ fw.place_indicator('indicator_lines') }}
         </div>
     </div>
+{% endblock %}
+
+{% block bootstrap_js_bottom %}
+    {{ super() }}
+
+    <script type="text/javascript">
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    var show_table = function (url, data) {
+        $.post(url, data, function (data) {
+            var div_left = $('.pull-left');
+            var div_right = $('.pull-right');
+            div_left.find('table').remove();
+            div_left.find('img').show();
+            div_right.find('table').remove();
+            div_right.find('img').show();
+            var table_stops = $('<table><thead><tr><th>站点名</th><th>Count</th></tr></thead></table>').addClass('table table-hover');
+
+            $.each(data['top_stop_names'], function (idx, value) {
+                var row = $('<tr></tr>');
+                row.append($('<td></td>').text(value[0]));
+                row.append($('<td></td>').text(value[1]));
+
+                table_stops.append(row);
+            });
+            div_left.find('img').hide();
+            div_left.append(table_stops);
+
+            var table_lines = $('<table><thead><tr><th>线路号</th><th>Count</th></tr></thead></table>').addClass('table table-hover');
+            $.each(data['top_line_numbers'], function (idx, value) {
+                var row = $('<tr></tr>');
+                row.append($('<td></td>').text(value[0]));
+                row.append($('<td></td>').text(value[1]));
+
+                table_lines.append(row);
+            });
+            div_right.find('img').hide();
+            div_right.append(table_lines);
+        });
+    };
+    {{ fw.make_options_js('get_top_data',
+                          'get_top_data',
+                          'show_table') }}
+    $('ul.nav>li:nth-child(2)').addClass('active');
+    </script>
 
 {% endblock %}
 

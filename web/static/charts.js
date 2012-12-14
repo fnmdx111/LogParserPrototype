@@ -96,36 +96,76 @@ var overview_bar_chart = function (title, target, legend, data, ticks) {
     });
 };
 
+$.jqplot.config.enablePlugins = true;
 
-var init_charts = function () {
-    $.post('get_init_data', function (data) {
-        $.jqplot.config.enablePlugins = true;
+
+var charts = {
+    stop: {},
+    line: {},
+    news: {},
+    stop2stop: {},
+    total: undefined,
+    client: undefined,
+    param: undefined
+};
+
+var clear_charts = function () {
+    $('[id^="indicator"]').show();
+
+    var keys = ['stop', 'line', 'news', 'stop2stop'];
+
+    for (var key in keys) {
+        if (keys.hasOwnProperty(key)) {
+            $('#indicator_' + keys[key] + '_overview').show();
+            if (!(typeof charts[keys[key]] === "undefined")) {
+                for (var sub in charts[keys[key]]) {
+                    if (charts[keys[key]].hasOwnProperty(sub)) {
+                        $('#indicator_' + keys[key] + '_' + sub).show();
+                        if (!(typeof charts[keys[key]][sub] === "undefined")) {
+                            console.log(charts[keys[key]][sub]);
+                            charts[keys[key]][sub].destroy();
+                            console.log(charts[keys[key]][sub]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    var keys_ = ['client', 'total', 'param'];
+    for (var key_ in keys_) {
+        if (keys_.hasOwnProperty(key_)) {
+            if (!(typeof charts[keys_[key_]] === "undefined")) {
+                charts[keys_[key_]].destroy();
+            }
+        }
+    }
+};
+
+var plot_single_data_charts = function (url, data) {
+    clear_charts();
+
+    $.post(url, data, function (data) {
 
         var ticks = data['time_slice_names'];
 
         var my_bar_chart = with_ticks(ticks);
 
         $('#indicator_total_per_hour').hide();
-        var total_per_hour_plot = my_bar_chart('Total Requests per Hour' +
-                                                   ' (total: ' + sum(data['total_requests_per_hour']) + ')',
-                                               'total_per_hour',
-                                               [data['total_requests_per_hour']]);
+        charts["total"] = my_bar_chart('Total Requests per Hour' +
+                                       ' (total: ' + sum(data['total_requests_per_hour']) + ')',
+                                       'total_per_hour',
+                                       [data['total_requests_per_hour']]);
         $('#indicator_client').hide();
-        var client_plot = my_bar_chart(make_title('client', data['client']),
-                                       'client_div',
-                                       [data['client']]);
+        charts["client"] = my_bar_chart(make_title('client', data['client']),
+                                        'client_div',
+                                        [data['client']]);
         $('#indicator_param').hide();
-        var param_chart = my_bar_chart(make_title('param!pget', data['param']['pget']),
+        charts["param"] = my_bar_chart(make_title('param!pget', data['param']['pget']),
                                        'param_div',
                                        [data['param']['pget']]);
 
         var keys = ['stop', 'line', 'news', 'stop2stop'];
-        var charts = {
-            stop: {},
-            line: {},
-            news: {},
-            stop2stop: {}
-        };
         for (var key in keys) {
             if (keys.hasOwnProperty(key)) {
                 var overview = 'overview';
@@ -152,10 +192,9 @@ var init_charts = function () {
                 console.log(series[0] + '_' + series[1] + '_div');
                 $('#indicator_' + series[0] + '_' + series[1]).hide();
 
-                var chart = undefined;
                 if (!(series[1] === 'overview')) {
                     charts[series[0]][series[1]] = my_bar_chart(make_title(series[0] + '!' + series[1],
-                                                                data[series[0]][series[1]]),
+                                                                           data[series[0]][series[1]]),
                                                                 series[0] + '_' + series[1] + '_div',
                                                                 [data[series[0]][series[1]]]);
                 }
@@ -163,7 +202,7 @@ var init_charts = function () {
                 charts[series[0]][series[1]].replot();
             }
         });
-    });
+    })
 };
 
 

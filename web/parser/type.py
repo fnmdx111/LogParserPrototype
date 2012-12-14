@@ -1,6 +1,8 @@
 # encoding: utf-8
 
-from collections import Counter
+from collections import Counter, defaultdict
+from flask import jsonify
+from web.misc import get_request_count_per_t_slice_of, from_, get_name, get_count
 
 class Requests(object):
     def __init__(self):
@@ -220,11 +222,14 @@ class TimeSlice(object):
 
 
 class Log(object):
-    def __init__(self, logger=None, day=None):
+    def __init__(self, date=None, logger=None, day=None):
         self.day = day
         self.logger = logger
 
         self.time_slices = map(TimeSlice, range(24))
+        self.date = date
+
+        self.count = 0
 
 
     @staticmethod
@@ -233,6 +238,8 @@ class Log(object):
 
 
     def add(self, time, request):
+        self.count += 1
+
         time_number = Log.time_to_number(time)
         self.time_slices[time_number].add(time_number, request)
 
@@ -242,10 +249,44 @@ class Log(object):
             raise ValueError, 'incompatible operand type'
 
         log = Log()
+
+        log.count = self.count + other.count
+
         for i in range(24):
             log.time_slices[i] = self.time_slices[i] + other.time_slices[i]
 
         return log
+
+
+    def request_count(self, req_flag):
+        return sum(map(get_request_count_per_t_slice_of(req_flag),
+                       self.time_slices))
+
+
+    def jsonify(self):
+        from_log = from_(self.time_slices)
+
+        d = map(lambda (k, v): (k.split('!'), v),
+                {r_flag: from_log(get_request_count_per_t_slice_of(r_flag))
+                 for r_flag in req_flag[1:]}.iteritems())
+        d_prime = defaultdict(dict)
+        for (main, sub), v in d:
+            d_prime[main][sub] = v
+        for main in d_prime:
+            stub = {sub: sum(d_prime[main][sub])
+                    for sub in d_prime[main]}
+            d_prime[main]['overview'] = [stub.keys(), map(lambda i: [i], stub.values())]
+
+        d_prime.update({
+            'time_slice_names': from_log(get_name),
+            'total_requests_per_hour': from_log(get_count),
+            'client': from_log(get_request_count_per_t_slice_of('client'))
+        })
+
+        print d_prime
+
+        return jsonify(d_prime)
+
 
 
 

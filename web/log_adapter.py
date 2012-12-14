@@ -5,30 +5,20 @@ import threading
 import operator
 from web import misc, app
 from web.parser import log_parser
-from web.parser.type import Log
 
 
 cache = {}
 
 def cached(func):
-    def wrapper(*args):
-        if func not in cache:
-            cache[func] = func(*args)
-        return cache[func]
+    def wrapper(arg):
+        if arg not in cache:
+            cache[arg] = func(arg)
+        return cache[arg]
     return wrapper
 
 
-@cached
-def get_multiple_log():
-    logs = []
-    lock = threading.RLock()
-    def _(l, path):
-        log = log_parser.get_log(path)
-        with lock:
-            l.append(log)
-
+def get_buslogs_path():
     cwd = os.getcwd()
-    print cwd
     if 'LogParserPrototype' not in cwd:
         # working outside `LogParserPrototype'
         buslogs_path_part = 'LogParserPrototype'
@@ -39,7 +29,39 @@ def get_multiple_log():
         else:
             # working under `LogParserPrototype'
             buslogs_path_part = ''
-    buslogs_path = os.path.join(buslogs_path_part, 'buslogs')
+
+    return os.path.join(buslogs_path_part, 'buslogs')
+
+
+
+def list_logs(buslogs_dir=None):
+    if not buslogs_dir:
+        buslogs_dir = get_buslogs_path()
+
+    root, _, files = list(os.walk(buslogs_dir))[0]
+    file_names = filter(lambda name: name != '.gitignore', files)
+
+    return zip(file_names,
+               map(lambda file_name: os.path.join(root, file_name),
+                   file_names))
+
+
+
+@cached
+def get_single_log(full_path):
+    return log_parser.get_log(full_path)
+
+
+
+def get_multiple_logs():
+    logs = []
+    lock = threading.RLock()
+    def _(l, path):
+        log = get_single_log(path)
+        with lock:
+            l.append(log)
+
+    buslogs_path = get_buslogs_path()
     app.logger.info(buslogs_path)
 
     # a bit ugly here, but we'll figure it out later
@@ -50,33 +72,20 @@ def get_multiple_log():
         else:
             pass
 
-        for paths in misc.take(files, by=3):
+        for paths in misc.take(files, by=1):
             threads = []
             for log_path in paths:
                 thread = threading.Thread(target=lambda: _(logs, os.path.join(root, '', log_path)))
-                app.logger.info('starting', log_path)
+                app.logger.info('starting %s' % log_path)
                 thread.start()
                 threads.append(thread)
 
             for thread in threads:
                 thread.join()
 
-    return reduce(operator.add, logs, Log())
+    return logs
 
 
-
-@cached
-def get_current_log():
-    log = []
-    def _(l):
-        l.append(log_parser.get_log(r'e:\bus.log'))
-        return l
-
-    thread = threading.Thread(target=lambda: _(log))
-    thread.start()
-    thread.join()
-
-    return log[0]
 
 
 
@@ -84,6 +93,6 @@ get_counter = log_parser.get_counter
 
 
 if __name__ == '__main__':
-    print get_multiple_log()
+    print get_multiple_logs()
 
 

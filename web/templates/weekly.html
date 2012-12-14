@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+
+{% block body_content %}
+    {{ super() }}
+
+
+{% endblock %}
+
+
+{% block bootstrap_js_bottom %}
+    {{ super() }}
+
+    <script type="text/javascript">
+    $('ul.nav>li:nth-child(3)').addClass('active');
+    </script>
+{% endblock %}
+

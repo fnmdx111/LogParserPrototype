@@ -1,5 +1,6 @@
 {% extends "bootstrap_responsive.html" %}
 
+
 {% block style %}
     {{ super() }}
 
@@ -18,7 +19,7 @@
                 <span class="brand">Log</span>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
-                        <li class="active">
+                        <li>
                             <a href="{{ url_for('home') }}">
                                 <i class="icon-home icon-white"></i> HOME
                             </a>
@@ -26,6 +27,11 @@
                         <li>
                             <a href="{{ url_for('top') }}">
                                 <i class="icon-th-list icon-white"></i> TOP 100
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('weekly') }}">
+                                <i class="icon-signal icon-white"></i> WEEKLY
                             </a>
                         </li>
                     </ul>
