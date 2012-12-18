@@ -41,9 +41,10 @@ def list_logs(buslogs_dir=None):
     root, _, files = list(os.walk(buslogs_dir))[0]
     file_names = filter(lambda name: name != '.gitignore', files)
 
-    return zip(file_names,
-               map(lambda file_name: os.path.join(root, file_name),
-                   file_names))
+    return sorted(zip(file_names,
+                      map(lambda file_name: os.path.join(root, file_name),
+                          file_names)),
+                  key=lambda (v1, _): v1)
 
 
 
