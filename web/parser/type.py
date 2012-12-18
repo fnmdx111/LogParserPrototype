@@ -279,8 +279,20 @@ class Log(object):
 
         d_prime.update({
             'time_slice_names': from_log(get_name),
-            'total_requests_per_hour': from_log(get_count),
             'client': from_log(get_request_count_per_t_slice_of('client'))
+        })
+
+        req_names = ['line', 'news', 'param', 'stop', 'stop2stop']
+        d_prime.update({
+            'total': {
+                'perhour': from_log(get_count),
+                'overview': [['client'] + req_names,
+                             map(lambda i: [i],
+                                 [sum(d_prime['client'])] +
+                                  map(lambda name: sum(map(lambda (i,): i,
+                                                           d_prime[name]['overview'][1])),
+                                      req_names))]
+            }
         })
 
         print d_prime

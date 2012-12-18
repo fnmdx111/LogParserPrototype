@@ -16,7 +16,7 @@ from_ = lambda iterable: lambda func: map(func, iterable)
 
 
 
-MAX_PARSER_THREADS = 5
+MAX_PARSER_THREADS = 1
 
 
 def take(iterable, by=MAX_PARSER_THREADS):

@@ -14,8 +14,21 @@
 
     <div class="container" id="main">
         {{ fw.make_options(options) }}
-        <div id="total_per_hour" style="height: 500px; width: 1050px;" class="">
-            {{ fw.place_indicator('indicator_total_per_hour') }}
+        <ul id="total_tabs" class="nav nav-tabs">
+            <li class="active">
+                <a href="#total_overview_div" data-toggle="tab">overview</a>
+            </li>
+            <li>
+                <a href="#total_perhour_div" data-toggle="tab">overview per hour</a>
+            </li>
+        </ul>
+        <div id="total_tab_contents" class="tab-content">
+            <div id="total_overview_div" style="height: 500px; width: 1050px;" class="tab-pane fade in active">
+                {{ fw.place_indicator('indicator_total_overview') }}
+            </div>
+            <div id="total_perhour_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
+                {{ fw.place_indicator('indicator_total_perhour') }}
+            </div>
         </div>
         {{ fw.make_tabs() }}
     </div>

@@ -104,7 +104,7 @@ var charts = {
     line: {},
     news: {},
     stop2stop: {},
-    total: undefined,
+    total: {},
     client: undefined,
     param: undefined
 };
@@ -112,7 +112,7 @@ var charts = {
 var clear_charts = function () {
     $('[id^="indicator"]').show();
 
-    var keys = ['stop', 'line', 'news', 'stop2stop'];
+    var keys = ['stop', 'line', 'news', 'stop2stop', 'total'];
 
     for (var key in keys) {
         if (keys.hasOwnProperty(key)) {
@@ -132,7 +132,7 @@ var clear_charts = function () {
         }
     }
 
-    var keys_ = ['client', 'total', 'param'];
+    var keys_ = ['client', 'param'];
     for (var key_ in keys_) {
         if (keys_.hasOwnProperty(key_)) {
             if (!(typeof charts[keys_[key_]] === "undefined")) {
@@ -151,11 +151,6 @@ var plot_single_data_charts = function (url, data) {
 
         var my_bar_chart = with_ticks(ticks);
 
-        $('#indicator_total_per_hour').hide();
-        charts["total"] = my_bar_chart('Total Requests per Hour' +
-                                       ' (total: ' + sum(data['total_requests_per_hour']) + ')',
-                                       'total_per_hour',
-                                       [data['total_requests_per_hour']]);
         $('#indicator_client').hide();
         charts["client"] = my_bar_chart(make_title('client', data['client']),
                                         'client_div',
@@ -165,7 +160,7 @@ var plot_single_data_charts = function (url, data) {
                                        'param_div',
                                        [data['param']['pget']]);
 
-        var keys = ['stop', 'line', 'news', 'stop2stop'];
+        var keys = ['total', 'stop', 'line', 'news', 'stop2stop'];
         for (var key in keys) {
             if (keys.hasOwnProperty(key)) {
                 var overview = 'overview';
