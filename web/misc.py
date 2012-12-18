@@ -15,7 +15,11 @@ get_date = attrgetter('date')
 from_ = lambda iterable: lambda func: map(func, iterable)
 
 
-def take(iterable, by=2):
+
+MAX_PARSER_THREADS = 5
+
+
+def take(iterable, by=MAX_PARSER_THREADS):
     while iterable:
         if len(iterable) < by:
             yield iterable

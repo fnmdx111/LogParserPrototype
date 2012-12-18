@@ -72,7 +72,7 @@ def get_multiple_logs():
         else:
             pass
 
-        for paths in misc.take(files, by=1):
+        for paths in misc.take(files):
             threads = []
             for log_path in paths:
                 thread = threading.Thread(target=lambda: _(logs, os.path.join(root, '', log_path)))
