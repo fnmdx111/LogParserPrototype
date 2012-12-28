@@ -53,23 +53,23 @@
             <a href="#line_query_div" data-toggle="tab">line!query</a>
         </li>
     </ul>
-    <div id="line_tab_contents" class="tab-content">
-        <div class="tab-pane fade in active" style="height: 500px; width: {{ width }};" id="line_overview_div">
+    <div id="line_tab_contents" class="tab-content plot-parent">
+        <div class="tab-pane fade in active plot-div" id="line_overview_div">
             {{ place_indicator('indicator_line_overview') }}
         </div>
-        <div class="tab-pane fade in" style="height: 500px; width: {{ width }};" id="line_live_div">
+        <div class="tab-pane fade in plot-div" id="line_live_div">
             {{ place_indicator('indicator_line_live') }}
         </div>
-        <div id="line_live2_div" style="height: 500px; width: {{ width }};" class="tab-pane fade in">
+        <div id="line_live2_div" class="tab-pane fade in plot-div">
             {{ place_indicator('indicator_line_live2') }}
         </div>
-        <div id="line_map_div" style="height: 500px; width: {{ width }};" class="tab-pane fade in">
+        <div id="line_map_div" class="tab-pane fade in plot-div">
             {{ place_indicator('indicator_line_map') }}
         </div>
-        <div id="line_map2_div" style="height: 500px; width: {{ width }};" class="tab-pane fade in">
+        <div id="line_map2_div" class="tab-pane fade in plot-div">
             {{ place_indicator('indicator_line_map2') }}
         </div>
-        <div id="line_query_div" style="height: 500px; width: {{ width }};" class="tab-pane fade in">
+        <div id="line_query_div" class="tab-pane fade in plot-div">
             {{ place_indicator('indicator_line_query') }}
         </div>
     </div>
@@ -85,14 +85,14 @@
             <a href="#news_list_div" data-toggle="tab">news!list</a>
         </li>
     </ul>
-    <div class="tab-content">
-        <div class="tab-pane fade in active" style="height: 500px; width: {{ width }};" id="news_overview_div">
+    <div class="tab-content plot-parent">
+        <div class="tab-pane fade in active plot-div" id="news_overview_div">
             {{ place_indicator('indicator_news_overview') }}
         </div>
-        <div id="news_detail_div" style="height: 500px; width: {{ width }};" class="tab-pane fade in">
+        <div id="news_detail_div" class="tab-pane fade in plot-div">
             {{ place_indicator('indicator_news_detail') }}
         </div>
-        <div id="news_list_div" style="height: 500px; width: {{ width }};" class="tab-pane fade in">
+        <div id="news_list_div" class="tab-pane fade in plot-div">
             {{ place_indicator('indicator_news_list') }}
         </div>
     </div>
@@ -114,20 +114,20 @@
             <a href="#stop_stoplist_div" data-toggle="tab">stop!stoplist</a>
         </li>
     </ul>
-    <div class="tab-content">
-        <div id="stop_overview_div" style="height: 500px; width: {{ width }};" class="tab-pane fade in active">
+    <div class="tab-content plot-parent">
+        <div id="stop_overview_div" class="tab-pane fade in active plot-div">
             {{ place_indicator('indicator_stop_overview') }}
         </div>
-        <div id="stop_lines_div" style="height: 500px; width: {{ width }};" class="tab-pane fade in">
+        <div id="stop_lines_div" class="tab-pane fade in plot-div">
             {{ place_indicator('indicator_stop_lines') }}
         </div>
-        <div id="stop_list4name_div" style="height: 500px; width: {{ width }};" class="tab-pane fade in">
+        <div id="stop_list4name_div" class="tab-pane fade in plot-div">
             {{ place_indicator('indicator_stop_list4name') }}
         </div>
-        <div id="stop_nearby_div" style="height: 500px; width: {{ width }};" class="tab-pane fade in">
+        <div id="stop_nearby_div" class="tab-pane fade in plot-div">
             {{ place_indicator('indicator_stop_nearby') }}
         </div>
-        <div id="stop_stoplist_div" style="height: 500px; width: {{ width }};" class="tab-pane fade in">
+        <div id="stop_stoplist_div" class="tab-pane fade in plot-div">
             {{ place_indicator('indicator_stop_stoplist') }}
         </div>
     </div>
@@ -143,22 +143,23 @@
             <a href="#stop2stop_name2id_div" data-toggle="tab">stop2stop!name2id</a>
         </li>
     </ul>
-    <div class="tab-content">
-        <div id="stop2stop_overview_div" style="height: 500px; width: {{ width }};" class="tab-pane fade in active">
+    <div class="tab-content plot-parent">
+        <div id="stop2stop_overview_div" class="tab-pane fade in active plot-div">
             {{ place_indicator('indicator_stop2stop_overview') }}
         </div>
-        <div id="stop2stop_lines4less_div" style="height: 500px; width: {{ width }};" class="tab-pane fade in">
+        <div id="stop2stop_lines4less_div" class="tab-pane fade in plot-div">
             {{ place_indicator('indicator_stop2stop_lines4less') }}
         </div>
-        <div id="stop2stop_name2id_div" style="height: 500px; width: {{ width }};" class="tab-pane fade in">
+        <div id="stop2stop_name2id_div" class="tab-pane fade in plot-div">
             {{ place_indicator('indicator_stop2stop_name2id') }}
         </div>
     </div>
 
-    <div id="client_div" style="height: 500px; width: {{ width }};" class="">
+    <div id="client_div" class="plot-div">
         {{ place_indicator('indicator_client') }}
     </div>
-    <div id="param_div" style="height: 500px; width: {{ width }};" class="">
+    <div id="param_div" class="plot-div" style="margin-top: 50px">
         {{ place_indicator('indicator_param') }}
     </div>
 {% endmacro %}
+

@@ -40,18 +40,34 @@ var bar_chart = function (title, target, series, ticks) {
             xaxis: {
                 renderer:$.jqplot.CategoryAxisRenderer,
                 ticks: ticks
+            },
+            yaxis: {
+                pad: 0
             }
-        },
-        highlighter: {
-            show: false
         }
     });
 };
 
 
+var line_chart = function (title, target, series, ticks) {
+    return $.jqplot(target, series, {
+        title: title,
+        axesDefaults: {
+            labelRenderer:$.jqplot.CanvasAxisLabelRenderer
+        },
+        axes: {
+            xaxis: {
+                renderer:$.jqplot.CategoryAxisRenderer,
+                ticks: ticks
+            }
+        }
+    })
+};
+
+
 var with_ticks = function (ticks) {
     return function (title, target, series) {
-        return bar_chart(title, target, series, ticks);
+        return line_chart(title, target, series, ticks);
     }
 };
 

@@ -4,7 +4,21 @@
 {% block style %}
     {{ super() }}
     <style type="text/css">
-        div[id*="div"] {
+        .center {
+            width: 1200px;
+            margin: 0 auto;
+        }
+
+        .plot-div {
+            width: 1050px;
+            height: 500px;
+            margin: 0 auto;
+        }
+
+        .plot-parent {
+            width: 1200px;
+            height: 550px;
+            margin: 0 auto;
         }
     </style>
 {% endblock %}
@@ -12,7 +26,7 @@
 {% block body_content %}
     {{ super() }}
 
-    <div class="container" id="main">
+    <div class="container center" id="main">
         {{ fw.make_options(options) }}
         <ul id="total_tabs" class="nav nav-tabs">
             <li class="active">
@@ -22,11 +36,11 @@
                 <a href="#total_perhour_div" data-toggle="tab">overview per hour</a>
             </li>
         </ul>
-        <div id="total_tab_contents" class="tab-content">
-            <div id="total_overview_div" style="height: 500px; width: 1050px;" class="tab-pane fade in active">
+        <div id="total_tab_contents" class="tab-content plot-parent">
+            <div id="total_overview_div" style="height: 500px; width: 1050px;" class="tab-pane fade in active plot-div" >
                 {{ fw.place_indicator('indicator_total_overview') }}
             </div>
-            <div id="total_perhour_div" style="height: 500px; width: 1050px;" class="tab-pane fade in">
+            <div id="total_perhour_div" style="height: 500px; width: 1050px;" class="tab-pane fade in plot-div">
                 {{ fw.place_indicator('indicator_total_perhour') }}
             </div>
         </div>
