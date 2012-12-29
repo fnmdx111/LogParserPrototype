@@ -84,7 +84,7 @@ def get_multiple_logs():
             for thread in threads:
                 thread.join()
 
-    return logs
+    return sorted(logs, key=lambda log: log.date)
 
 
 
