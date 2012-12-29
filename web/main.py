@@ -3,9 +3,9 @@
 from collections import defaultdict
 from flask import render_template, request, jsonify
 import operator
-from web.parser import type
+from web.parser import type as t
 from web import app, log_adapter
-from web.misc import get_count, get_request_count_of, from_, get_date
+from web.misc import get_count, get_request_count_of, from_, get_date, get_overview
 from web.parser.type import Log
 
 sum_log = lambda logs: reduce(operator.add, logs, Log())
@@ -66,8 +66,11 @@ def get_weekly_data():
     d_prime = defaultdict(dict)
 
     for (main, sub), req_flag in map(lambda req_flag: (req_flag.split('!'), req_flag),
-                                     type.req_flag[1:]):
+                                     t.req_flag[1:]):
         d_prime[main][sub] = from_logs(get_request_count_of(req_flag))
+
+    for main in t.req_main_flag:
+        d_prime[main]['overview'] = get_overview(d_prime[main])
 
     d_prime.update({
         'total_requests_per_day': from_logs(get_count),

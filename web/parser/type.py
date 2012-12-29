@@ -191,6 +191,9 @@ req_flag = [
     'stop!lines', 'stop!list4name', 'stop!nearby', 'stop!stoplist',
     'stop2stop!lines4less', 'stop2stop!name2id'
 ]
+req_main_flag = [
+    'line', 'news', 'param', 'stop', 'stop2stop'
+]
 
 class TimeSlice(object):
     def __init__(self, number):

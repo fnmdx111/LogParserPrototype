@@ -32,6 +32,43 @@
 {% endmacro %}
 
 
+{% macro make_tab(main_id, sub_ids) %}
+    <ul id="{{ main_id }}_tabs" class="nav nav-tabs">
+        {% for sub_id in sub_ids %}
+            {% if loop.first %}
+                {% set class = 'active' %}
+            {% else %}
+                {% set class = '' %}
+            {% endif %}
+
+            <li class="{{ class }}">
+                <a href="#{{ main_id }}_{{ sub_id }}_div" data-toggle="tab">
+                    {%- if loop.first -%}
+                        {{ sub_id }}
+                    {%- else -%}
+                        {{ main_id }}!{{ sub_id }}
+                    {%- endif -%}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+    <div id="{{ main_id }}_tab_contents" class="tab-content plot-parent">
+        {% for sub_id in sub_ids %}
+            {% if loop.first %}
+                {% set class = ' active' %}
+            {% else %}
+                {% set class = '' %}
+            {% endif %}
+            <div class="tab-pane fade in plot-div{{ class }}" id="{{ main_id }}_{{ sub_id }}_div">
+                {% set indicator_id = ['indicator', main_id, sub_id]|join('_') %}
+                {{ place_indicator(indicator_id) }}
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+
+
 {% macro make_tabs(width="1050px") %}
     <ul id="line_tabs" class="nav nav-tabs">
         <li class="active">

@@ -1,5 +1,6 @@
 
 from operator import attrgetter, methodcaller
+import operator
 
 
 get_name = attrgetter('name')
@@ -16,7 +17,7 @@ from_ = lambda iterable: lambda func: map(func, iterable)
 
 
 
-MAX_PARSER_THREADS = 3
+MAX_PARSER_THREADS = 1
 
 
 def take(iterable, by=MAX_PARSER_THREADS):
@@ -26,5 +27,15 @@ def take(iterable, by=MAX_PARSER_THREADS):
         else:
             yield iterable[:by]
         iterable = iterable[by:]
+
+
+def get_overview(d):
+    """d can be regarded as a matrix actually"""
+    return reduce(lambda acc, item: map(operator.add,
+                                        acc, item),
+                  d.values(),
+                  [0] * len(d[d.keys()[0]]))
+
+
 
 
