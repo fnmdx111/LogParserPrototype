@@ -28,23 +28,20 @@
 
     <div class="container center" id="main">
         {{ fw.make_options(options) }}
-        <ul id="total_tabs" class="nav nav-tabs">
-            <li class="active">
-                <a href="#total_overview_div" data-toggle="tab">overview</a>
-            </li>
-            <li>
-                <a href="#total_perhour_div" data-toggle="tab">overview per hour</a>
-            </li>
-        </ul>
-        <div id="total_tab_contents" class="tab-content plot-parent">
-            <div id="total_overview_div" style="height: 500px; width: 1050px;" class="tab-pane fade in active plot-div" >
-                {{ fw.place_indicator('indicator_total_overview') }}
-            </div>
-            <div id="total_perhour_div" style="height: 500px; width: 1050px;" class="tab-pane fade in plot-div">
-                {{ fw.place_indicator('indicator_total_perhour') }}
-            </div>
+        {% for main, subs in [
+                ('total', ('overview', 'perhour')),
+                ('line', ('overview', 'live', 'live2', 'map', 'map2', 'query')),
+                ('news', ('overview', 'detail', 'list')),
+                ('stop', ('overview', 'lines', 'list4name', 'nearby', 'stoplist')),
+                ('stop2stop', ('overview', 'lines4less', 'name2id'))] %}
+            {{ fw.make_tab(main, subs) }}
+        {% endfor %}
+        <div id="client_div" class="plot-div">
+            {{ fw.place_indicator('indicator_client') }}
         </div>
-        {{ fw.make_tabs() }}
+        <div id="param_div" class="plot-div" style="margin-top: 50px">
+            {{ fw.place_indicator('indicator_param') }}
+        </div>
     </div>
 {% endblock %}
 
@@ -55,6 +52,16 @@
 
     <script type="text/javascript" src="/static/charts.js"></script>
     <script type="text/javascript">
+    var charts = {
+        stop: {},
+        line: {},
+        news: {},
+        stop2stop: {},
+        total: {},
+        client: undefined,
+        param: undefined
+    };
+
     {{ fw.make_options_js('get_total_data',
                           'get_single_data',
                           'plot_single_data_charts') }}

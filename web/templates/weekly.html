@@ -56,66 +56,16 @@
     <script type="text/javascript">
     $('ul#nav-bar>li:nth-child(3)').addClass('active');
 
-    $.post('get_weekly_data', {}, function (data) {
-        console.log(data);
-    });
-
-    (function () {
-        var charts = {
-            stop: {},
-            line: {},
-            news: {},
-            stop2stop: {},
-            total: {},
-            client: undefined,
-            param: {}
-        };
-
-        clear_charts();
-
-        $.post('get_weekly_data', {}, function (data) {
-            var ticks = data['ticks'];
-            var my_line_chart = with_ticks(ticks);
-
-            $('#indicator_client').hide();
-            charts["client"] = my_line_chart(make_title('client', data['client']),
-                                             'client_div',
-                                             [data['client']]);
-            $('#indicator_total_overview').hide();
-            charts["client"] = my_line_chart(make_title('total_overview', data['total_requests_per_day']),
-                                             'total_overview_div',
-                                             [data['total_requests_per_day']]);
-
-            $('#main').bind('shown', function (e) {
-                var series = e.target.href.split('#');
-                series = series[1].split('_');
-                series.pop();
-
-                if (!charts[series[0]][series[1]]) {
-                    console.log(series[0] + '_' + series[1]);
-                    $('#indicator_' + series[0] + '_' + series[1]).hide();
-                    charts[series[0]][series[1]] = my_line_chart(make_title(series[0] + '!' + series[1],
-                                                                            data[series[0]][series[1]]),
-                                                                 series[0] + '_' + series[1] + '_div',
-                                                                 [data[series[0]][series[1]]]);
-                } else {
-                    charts[series[0]][series[1]].replot();
-                }
-            });
-            $('div[id*="overview"]').each(function () {
-                var series = $(this).attr('id').split('_');
-                series.pop();
-
-                if (!(this.id === 'total_overview_div')) {
-                    $('#indicator_' + series[0] + '_' + series[1]).hide();
-                    charts[series[0]][series[1]] = my_line_chart(make_title(series[0] + '!' + series[1],
-                                                                            data[series[0]][series[1]]),
-                                                                 series[0] + '_' + series[1] + '_div',
-                                                                 [data[series[0]][series[1]]]);
-                }
-            });
-        });
-    })();
+    var charts = {
+        stop: {},
+        line: {},
+        news: {},
+        stop2stop: {},
+        total: undefined,
+        client: undefined,
+        param: {}
+    };
+    plot_weekly_data_charts(charts);
 
     </script>
 
