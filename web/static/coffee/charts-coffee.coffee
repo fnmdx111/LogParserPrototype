@@ -2,11 +2,11 @@ console.log 'charts-coffee.coffee loaded.'
 
 
 sum = (array) ->
-    array.reduce (acc, x) -> acc + x
+    array.reduce ((acc, x) -> acc + x), 0
 
 
 sum_prime = (array) ->
-    array.reduce (acc, x) -> acc + x[0]
+    array.reduce ((acc, x) -> acc + x[0]), 0
 
 
 make_title = (title, array) ->
@@ -82,12 +82,10 @@ clear_charts = (charts, keys=multiple_main_key, keys_=singular_main_key) ->
     for key in keys
         $("#indicator_#{ key }_overview").show()
         if charts[key]
-            for sub in charts[key]
+            for own sub of charts[key]
                 $("#indicator_#{ key }_#{ sub }").show()
                 if charts[key][sub]
-                    console.log charts[key][sub]
                     charts[key][sub].destroy()
-                    console.log charts[key][sub]
 
     for key in keys_
         if charts[key]

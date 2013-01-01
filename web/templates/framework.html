@@ -16,7 +16,7 @@
 {% endmacro %}
 
 
-{% macro make_options_js(url_all, url_else, func_name) %}
+{% macro make_options_js(url_all, url_else, func_name, additional_args) %}
         $('#select_paths').live('change', function () {
             var value = $(this).val();
             var url = '';
@@ -25,7 +25,10 @@
             } else {
                 url = '{{ url_else }}';
             }
-            {{ func_name }}(url, { full_path: value }, charts);
+            {{ func_name }}(url, { full_path: value }
+                {%- if additional_args -%}
+                    {{ [',', additional_args]|join(' ') }}
+                {%- endif -%});
         })
         $('#select_paths').find('option:nth-child(2)').change();
 {% endmacro %}
